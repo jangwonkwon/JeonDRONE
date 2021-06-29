@@ -120,33 +120,36 @@ def main(window):
 
 def main2(window):
 	next_key = None
+
 	while True:
 		key = window.getch()
 		print(key)
-		if key != -1:
-			next_key = key
-			curses.halfdelay(1)
-			if key == 259:
-				print('up')
-				setMotor(CH1, 80, FORWARD)
-				setMotor(CH2, 80, FORWARD)
-			elif key ==258:
-				print('down')
-				setMotor(CH1, 40, BACKWORD)
-				setMotor(CH2, 40, BACKWORD)
-			elif key == 260:
-				print('left')
-				setMotor(CH1, 60, FORWARD)
-			elif key == 261:
-				print('right')
-				setMotor(CH2, 60, FORWARD)
+		print(next_key)
+#		if key != -1:
+#		curses.halfdelay(1)
+		next_key = key
+		if key == 259:
+			print('up')
+			setMotor(CH1, 80, FORWARD)
+			setMotor(CH2, 80, FORWARD)
+		elif key ==258:
+			print('down')
+			setMotor(CH1, 40, BACKWORD)
+			setMotor(CH2, 40, BACKWORD)
+		elif key == 260:
+			print('left')
+			setMotor(CH1, 60, FORWARD)
+		elif key == 261:
+			print('right')
+			setMotor(CH2, 60, FORWARD)
 
-			while next_key == key:
-				next_key = window.getch()
-		else:
+		while next_key == key:
+			next_key = window.getch()
+		#else:
 		#KEY UP #정지
-			setMotor(CH1, 80, STOP)
-			setMotor(CH2, 80, STOP)
+		curses.halfdelay(1)
+		setMotor(CH1, 80, STOP)
+		setMotor(CH2, 80, STOP)
 
 
 
