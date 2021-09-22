@@ -1,5 +1,4 @@
-
-# 라즈베리파이 GPIO 패키지
+#-*-coding:utf-8-*-
 import RPi.GPIO as GPIO
 from time import sleep
 import curses
@@ -107,8 +106,10 @@ def main(window):
 			elif key == 260:
 				print('left')
 				setMotor(CH1, 60, FORWARD)
+				setMotor(Ch2, 80, STOP)
 			elif key == 261:
 				print('right')
+				setMotor(Ch1, 60, FORWARD)
 				setMotor(CH2, 60, FORWARD)
 
 			while next_key == key:
@@ -116,7 +117,6 @@ def main(window):
 			#KEY UP #정지
 			setMotor(CH1, 80, STOP)
 			setMotor(CH2, 80, STOP)
-
 
 def main2(window):
 	next_key = None
@@ -153,7 +153,67 @@ def main2(window):
 
 
 
+def main3(window):
+        next_key = None
+	key = window.getch()
+        while True:
+
+		curses.halfdelay(1)
+                print(key)
+                print(next_key)
+                if key == 259:
+                        print('up')
+                        setMotor(CH1, 80, FORWARD)
+                        setMotor(CH2, 80, FORWARD)
+                elif key ==258:
+                        print('down')
+                        setMotor(CH1, 40, BACKWORD)
+                        setMotor(CH2, 40, BACKWORD)
+                elif key == 260:
+                        print('left')
+                        setMotor(CH1, 60, FORWARD)
+                elif key == 261:
+                        print('right')
+                        setMotor(CH2, 60, FORWARD)
+
+                while next_key == key:
+                        next_key = window.getch()
+		key = next_key
+                #KEY UP #정지
+                curses.halfdelay(1)
+                setMotor(CH1, 80, STOP)
+                setMotor(CH2, 80, STOP)
+
+
+def main_key_everytime(window):
+        while True:
+                key = window.getch()
+		curses.halfdelay(1)
+                print(key)
+                if key == 259:
+                        print('up')
+                        setMotor(CH1, 80, FORWARD)
+                        setMotor(CH2, 80, FORWARD)
+                elif key ==258:
+                        print('down')
+                        setMotor(CH1, 40, BACKWORD)
+                        setMotor(CH2, 40, BACKWORD)
+                elif key == 260:
+                        print('left')
+                        setMotor(CH1, 60, FORWARD)
+                elif key == 261:
+                        print('right')
+                        setMotor(CH2, 60, FORWARD)
+                elif key == -1:
+			#curses.halfdelay(1)
+			setMotor(CH1, 80, STOP)
+			setMotor(CH2, 80, STOP)
+
+
+
 curses.wrapper(main2)
+#curses.wrapper(main_key_everytime)
+
 
 # 종료
 GPIO.cleanup()
