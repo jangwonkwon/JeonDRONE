@@ -37,7 +37,7 @@ def setPinConfig(EN, INA, INB):
     GPIO.setup(INA, GPIO.OUT)
     GPIO.setup(INB, GPIO.OUT)
     # 100khz 로 PWM 동작 시킴
-    pwm = GPIO.PWM(EN, 50)
+    pwm = GPIO.PWM(EN, 100)
     # 우선 PWM 멈춤.
     pwm.start(0)
     return pwm
