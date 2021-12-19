@@ -1,5 +1,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+
 import RPi.GPIO as GPIO
 import time
 import bmpsensor
@@ -7,13 +10,27 @@ import bmpsensor
 from gui import Ui_Dialog
 from BMP180_class import BMP180_data
 
+import bmpsensor
+
+class module_work(QThread):
+    def run(self):
+        while True:
+            self.temp, self.pressure, self.altitude = bmpsensor.readBmp180()
+            ui.Height_LCD.display(self.altitude)
+            print(self.altitude)
+#            time.sleep(1)
+
+
+
 class Main_Dialog(Ui_Dialog):
     def __init__(self, Diaglog):
         self.drone_set()
         self.drone(Dialog)
 #        self.hovering()
         self.display()
-        self.module_work()
+#        self.module_work()
+        self.worker = module_work()
+        self.worker.start()
 
     def drone_set(self):
         ui.Motor_FR = 18   # pin Number
@@ -223,8 +240,8 @@ if __name__ == "__main__":
     Dialog = QtWidgets.QDialog()
     ui = Ui_Dialog()
     ui.setupUi(Dialog)
-    bmp = BMP180_data()
-    bmp.startBMP()
+#    bmp = BMP180_data()
+#    bmp.startBMP()
     function_work = Main_Dialog(Dialog)
     Dialog.show()
     sys.exit(app.exec_())
