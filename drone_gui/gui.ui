@@ -1411,7 +1411,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QCheckBox" name="Gain_Height_label_check">
+  <widget class="QCheckBox" name="Gain_Height_check">
    <property name="geometry">
     <rect>
      <x>740</x>

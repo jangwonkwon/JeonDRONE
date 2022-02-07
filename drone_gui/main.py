@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 
+
 import RPi.GPIO as GPIO
 import time
 import bmpsensor
@@ -16,8 +17,86 @@ class module_work(QThread):
     def run(self):
         while True:
             self.temp, self.pressure, self.altitude = bmpsensor.readBmp180()
+
+
+#            AngleX_target, AngleY_target, AngleZ_target, PosX_target, PosY_target, Height_target
+
+#            AngleX_const, AngleX_v_const, AngleX_a_const
+#            AngleY_const, AngleY_v_const, AngleY_a_const
+#            AngleZ_const, AngleZ_v_const, AngleZ_a_const
+
+#            PosX_const, PosX_v_const, PosX_a_const
+#            PosY_const, PosY_v_const, PosY_a_const
+
+#            Height_const, Height_v_const, Height_a_const
+
+
+#            A, B, C = 6050.read(targetAX, targetAY, targetAZ, targetPX, targetPY, targetH)
+
+#            AngleX_P, AngleX_I, AngleX_D
+#            AngleY_P, AngleY_I, AngleY_D
+#            AngleZ_P, AngleZ_I, AngleZ_D
+
+#            PosX_P, PosX_I, PosX_D
+#            PosY_P, PosY_I, PosY_D
+
+#            Height_P, Height_I, Height_D
+
+
+            if ui.Gain_RotationX_check.isChecked() == True:
+               delta = ui.GLXP * AngleX_P + ui.GLXI * AngleX_I  + ui.GLXD * AngleX_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+            if ui.Gain_RotationY_check.isChecked() == True:
+               delta = ui.GLYP * AngleY_P + ui.GLYI * AngleY_I  + ui.GLYD * AngleY_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+            if ui.Gain_RotationZ_check.isChecked() == True:
+               delta = ui.GLZP * AngleZ_P + ui.GLZI * AngleZ_I  + ui.GLZD * AngleZ_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+            if ui.Gain_PosX_check.isChecked() == True:
+               delta = ui.GVXP * PosX_P + ui.GVXI * PosX_I  + ui.GVXD * PosX_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+
+            if ui.Gain_PosY_check.isChecked() == True:
+               delta = ui.GVYP * PosY_P + ui.GVYI * PosY_I  + ui.GVYD * PosY_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+            if ui.Gain_Height_check.isChecked() == True:
+               delta = ui.GHP * Height_P + ui.GHI * Height_I  + ui.GHD * Height_D
+
+               ui.duty_FR = ui.duty_FR +- delta
+               ui.duty_FL = ui.duty_FL +- delta
+               ui.duty_BR = ui.duty_BR +- delta
+               ui.duty_BL = ui.duty_BL +- delta
+
+            function_work.duty_set()
+
+
             ui.Height_LCD.display(self.altitude)
-            print(self.altitude)
+#            print(self.altitude)
 #            time.sleep(1)
 
 
@@ -62,6 +141,30 @@ class Main_Dialog(Ui_Dialog):
         ui.pwm_BR.start(ui.duty_BR)
         ui.pwm_BL.start(ui.duty_BL)
 
+
+    def drone_off(self):
+        ui.duty_FR=0
+        ui.duty_FL=0
+        ui.duty_BR=0
+        ui.duty_BL=0
+
+        self.duty_set()
+
+        ui.pwm_FR.stop()
+        ui.pwm_FL.stop()
+        ui.pwm_BR.stop()
+        ui.pwm_BL.stop()
+        GPIO.cleanup()
+
+        print()
+        print("Drone OFF !")
+        print()
+
+        QCoreApplication.instance().quit()
+
+        self.display()
+
+
     def display(self):
         ui.Duty_FR_LCD.display(ui.duty_FR)
         ui.Duty_FL_LCD.display(ui.duty_FL)
@@ -84,6 +187,10 @@ class Main_Dialog(Ui_Dialog):
         ui.Single_R.clicked.connect(self.Set_btn_Single_L)
         ui.Single_TR.clicked.connect(self.Set_btn_Single_TR)
         ui.Single_TL.clicked.connect(self.Set_btn_Single_TL)
+
+        ui.Exit_button.clicked.connect(self.drone_off)
+#        ui.Exit_button.clicked.connect(QCoreApplication.instance().quit)
+
 
     def Set_btn_clicked(self):
         print("Set button clicked")
@@ -119,7 +226,7 @@ class Main_Dialog(Ui_Dialog):
         self.duty_set()
 
     def Frequency_set(self):
-        print("frequency = "+str(ui.frequency))
+#        print("frequency = "+str(ui.frequency))
         ui.pwm_FR.ChangeFrequency(ui.frequency)
         ui.pwm_FL.ChangeFrequency(ui.frequency)
         ui.pwm_BR.ChangeFrequency(ui.frequency)
@@ -127,7 +234,7 @@ class Main_Dialog(Ui_Dialog):
         self.display()
 
     def duty_set(self):
-        print("duty = "+str(ui.duty_FR))
+#        print("duty = "+str(ui.duty_FR))
         ui.pwm_FR.ChangeDutyCycle(ui.duty_FR)
         ui.pwm_FL.ChangeDutyCycle(ui.duty_FL)
         ui.pwm_BR.ChangeDutyCycle(ui.duty_BR)
