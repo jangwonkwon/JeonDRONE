@@ -19,16 +19,16 @@ class module_work(QThread):
             self.temp, self.pressure, self.altitude = bmpsensor.readBmp180()
 
 
-#            AngleX_target, AngleY_target, AngleZ_target, PosX_target, PosY_target, Height_target
+#            ui.AngleX_target, ui.AngleY_target, ui.AngleZ_target, ui.PosX_target, ui.PosY_target, ui.Height_target
 
-#            AngleX_const, AngleX_v_const, AngleX_a_const
-#            AngleY_const, AngleY_v_const, AngleY_a_const
-#            AngleZ_const, AngleZ_v_const, AngleZ_a_const
+#            ui.AngleX_const, ui.AngleX_v_const, ui.AngleX_a_const
+#            ui.AngleY_const, ui.AngleY_v_const, ui.AngleY_a_const
+#            ui.AngleZ_const, ui.AngleZ_v_const, ui.AngleZ_a_const
 
-#            PosX_const, PosX_v_const, PosX_a_const
-#            PosY_const, PosY_v_const, PosY_a_const
+#            ui.PosX_const, ui.PosX_v_const, ui.PosX_a_const
+#            ui.PosY_const, ui.PosY_v_const, ui.PosY_a_const
 
-#            Height_const, Height_v_const, Height_a_const
+#            ui.Height_const, ui.Height_v_const, ui.Height_a_const
 
 
 #            A, B, C = 6050.read(targetAX, targetAY, targetAZ, targetPX, targetPY, targetH)
